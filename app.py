@@ -3,6 +3,8 @@ import json
 import os
 import uuid
 from datetime import datetime
+from PIL import Image
+import os
 
 # ---------------- CONFIG ----------------
 DB_FILE = "database.json"
@@ -37,6 +39,21 @@ def save_files(files, folder):
                 f.write(file.getbuffer())
             paths.append(path)
     return paths
+
+def safe_show_image(path, width=None, caption=None):
+    try:
+        if not path or not os.path.exists(path):
+            return
+
+        with open(path, "rb") as f:
+            img = Image.open(f)
+            img.load()  # force decode
+
+        st.image(img, width=width, caption=caption, use_container_width=True)
+
+    except Exception:
+        st.warning("⚠️ Unable to display image (file may be corrupted or removed)")
+
 
 def search_db(query, db):
     results = {
@@ -346,33 +363,32 @@ elif menu == "Pages":
             # MEDIA
 
             
-            if p.get("proof_files"):
-                with st.expander("📎 Proof Files"):
-                    for file in p.get("proof_files", []):
-            
-                        # ---- Safety: file exists ----
-                        if not file or not os.path.exists(file):
-                            st.warning("⚠️ File not available")
-                            continue
-            
-                        file_lower = file.lower()
-            
-                        # ---- Image ----
-                        if file_lower.endswith((".png", ".jpg", ".jpeg")):
-                            st.image(file, use_container_width=True)
-            
-                        # ---- Video ----
-                        elif file_lower.endswith(".mp4"):
-                            st.video(file)
-            
-                        # ---- Audio ----
-                        elif file_lower.endswith(".mp3"):
-                            st.audio(file)
-            
-                        # ---- Document / Others ----
-                        else:
-                            st.markdown(f"📄 [Download document]({file})")
-            
+           if p.get("proof_files"):
+              with st.expander("📎 Proof Files"):
+                for file in p.get("proof_files", []):
+        
+                    # ---- Safety: file exists ----
+                    if not file or not os.path.exists(file):
+                        st.warning("⚠️ File not available")
+                        continue
+        
+                    file_lower = file.lower()
+        
+                    # ---- Image ----
+                    if file_lower.endswith((".png", ".jpg", ".jpeg")):
+                        safe_show_image(file)
+        
+                    # ---- Video ----
+                    elif file_lower.endswith(".mp4"):
+                        st.video(file)
+        
+                    # ---- Audio ----
+                    elif file_lower.endswith(".mp3"):
+                        st.audio(file)
+        
+                    # ---- Document / Others ----
+                    else:
+                        st.markdown(f"📄 [Download document]({file})")
 
             # ACTIONS
             col1, col2, col3 = st.columns(3)
@@ -737,6 +753,7 @@ elif menu == "About":
     **Developed with ❤️ using Streamlit**  
     *For people, by people.*
     """)
+
 
 
 
