@@ -464,17 +464,35 @@ elif menu == "Problems":
             st.caption("🏷️ " + " | ".join(p["tags"]))
 
         # ---------- MEDIA PREVIEW ----------
+           
+
         if p.get("proof_files"):
             with st.expander("📎 View Proof Files"):
-                for file in p["proof_files"]:
-                    if file.endswith((".png", ".jpg", ".jpeg")):
-                        st.image(file)
-                    elif file.endswith(".mp4"):
+                for file in p.get("proof_files", []):
+        
+                    # Safety check: file exists
+                    if not os.path.exists(file):
+                        st.warning("⚠️ File not found or removed")
+                        continue
+        
+                    file_lower = file.lower()
+        
+                    # IMAGE
+                    if file_lower.endswith((".png", ".jpg", ".jpeg")):
+                        st.image(file, use_container_width=True)
+        
+                    # VIDEO
+                    elif file_lower.endswith(".mp4"):
                         st.video(file)
-                    elif file.endswith(".mp3"):
+        
+                    # AUDIO
+                    elif file_lower.endswith(".mp3"):
                         st.audio(file)
+        
+                    # DOCUMENT / OTHER FILES
                     else:
-                        st.markdown(f"[📄 Document]({file})")
+                        st.markdown(f"📄 [Download document]({file})")
+
 
         # ---------- ACTION BUTTONS ----------
         colA, colB, colC, colD = st.columns([1, 1, 1, 2])
@@ -681,3 +699,4 @@ elif menu == "About":
     **Developed with ❤️ using Streamlit**  
     *For people, by people.*
     """)
+
