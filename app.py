@@ -404,7 +404,8 @@ elif menu == "Pages":
             if p.get("user"):
                 with st.expander("👤 User Info"):
                     if p["user"].get("photo"):
-                        st.image(p["user"]["photo"][0], width=120)
+                        # st.image(p["user"]["photo"][0], width=120)
+                        pass
                     st.write(p["user"])
 
             st.divider()
@@ -752,6 +753,7 @@ elif menu == "About":
     **Developed with ❤️ using Streamlit**  
     *For people, by people.*
     """)
+
 
 
 
