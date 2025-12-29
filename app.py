@@ -520,14 +520,34 @@ elif menu == "Problems":
             )
 
         # USER INFO
+                
+        
         if p.get("user"):
             with colD:
                 with st.expander("👤 User Info"):
-                    if p["user"].get("photo"):
-                        st.image(p["user"]["photo"][0], width=120)
-                    st.write(f"**Name:** {p['user'].get('name')}")
-                    st.write(f"**Email:** {p['user'].get('email')}")
-                    st.write(f"**Mobile:** {p['user'].get('mobile')}")
+        
+                    user = p.get("user", {})
+        
+                    # ---------- USER PHOTO ----------
+                    photo_list = user.get("photo", [])
+        
+                    if photo_list and isinstance(photo_list, list):
+                        photo_path = photo_list[0]
+        
+                        if photo_path and os.path.exists(photo_path):
+                            st.image(photo_path, width=120)
+                        else:
+                            st.caption("📷 Photo not available")
+        
+                    # ---------- USER DETAILS ----------
+                    name = user.get("name")
+                    email = user.get("email")
+                    mobile = user.get("mobile")
+        
+                    st.write(f"**Name:** {name if name else 'Not shared'}")
+                    st.write(f"**Email:** {email if email else 'Not shared'}")
+                    st.write(f"**Mobile:** {mobile if mobile else 'Not shared'}")
+        
 
         # ---------- COMMENT FORM ----------
         if st.session_state.get(f"show_cmt_{p['id']}"):
@@ -699,4 +719,5 @@ elif menu == "About":
     **Developed with ❤️ using Streamlit**  
     *For people, by people.*
     """)
+
 
