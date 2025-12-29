@@ -344,17 +344,35 @@ elif menu == "Pages":
                 st.caption("🏷️ " + ", ".join(p["tags"]))
 
             # MEDIA
+
+            
             if p.get("proof_files"):
                 with st.expander("📎 Proof Files"):
-                    for file in p["proof_files"]:
-                        if file.endswith((".png", ".jpg", ".jpeg")):
-                            st.image(file)
-                        elif file.endswith(".mp4"):
+                    for file in p.get("proof_files", []):
+            
+                        # ---- Safety: file exists ----
+                        if not file or not os.path.exists(file):
+                            st.warning("⚠️ File not available")
+                            continue
+            
+                        file_lower = file.lower()
+            
+                        # ---- Image ----
+                        if file_lower.endswith((".png", ".jpg", ".jpeg")):
+                            st.image(file, use_container_width=True)
+            
+                        # ---- Video ----
+                        elif file_lower.endswith(".mp4"):
                             st.video(file)
-                        elif file.endswith(".mp3"):
+            
+                        # ---- Audio ----
+                        elif file_lower.endswith(".mp3"):
                             st.audio(file)
+            
+                        # ---- Document / Others ----
                         else:
-                            st.markdown(f"[📄 Document]({file})")
+                            st.markdown(f"📄 [Download document]({file})")
+            
 
             # ACTIONS
             col1, col2, col3 = st.columns(3)
@@ -719,5 +737,6 @@ elif menu == "About":
     **Developed with ❤️ using Streamlit**  
     *For people, by people.*
     """)
+
 
 
