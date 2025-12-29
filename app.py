@@ -361,32 +361,32 @@ elif menu == "Pages":
                 st.caption("🏷️ " + ", ".join(p["tags"]))
 
             # MEDIA
-            if p.get("proof_files"):
-                with st.expander("📎 Proof Files"):
-                    for file in p.get("proof_files", []):
+            # if p.get("proof_files"):
+            #     with st.expander("📎 Proof Files"):
+            #         for file in p.get("proof_files", []):
             
-                        # ---- Safety: file exists ----
-                        if not file or not os.path.exists(file):
-                            st.warning("⚠️ File not available")
-                            continue
+            #             # ---- Safety: file exists ----
+            #             if not file or not os.path.exists(file):
+            #                 st.warning("⚠️ File not available")
+            #                 continue
             
-                        file_lower = file.lower()
+            #             file_lower = file.lower()
             
-                        # ---- Image ----
-                        if file_lower.endswith((".png", ".jpg", ".jpeg")):
-                            safe_show_image(file)
+            #             # ---- Image ----
+            #             if file_lower.endswith((".png", ".jpg", ".jpeg")):
+            #                 safe_show_image(file)
             
-                        # ---- Video ----
-                        elif file_lower.endswith(".mp4"):
-                            st.video(file)
+            #             # ---- Video ----
+            #             elif file_lower.endswith(".mp4"):
+            #                 st.video(file)
             
-                        # ---- Audio ----
-                        elif file_lower.endswith(".mp3"):
-                            st.audio(file)
+            #             # ---- Audio ----
+            #             elif file_lower.endswith(".mp3"):
+            #                 st.audio(file)
             
-                        # ---- Document / Others ----
-                        else:
-                            st.markdown(f"📄 [Download document]({file})")
+            #             # ---- Document / Others ----
+            #             else:
+            #                 st.markdown(f"📄 [Download document]({file})")
             
                         
             # ACTIONS
@@ -752,6 +752,7 @@ elif menu == "About":
     **Developed with ❤️ using Streamlit**  
     *For people, by people.*
     """)
+
 
 
 
